@@ -107,6 +107,14 @@ hr {
 .mono {
   font-family: monospace;
 }
+
+.piece-img {
+  height: 100px;
+}
+
+.full-piece-img {
+  height: 300px;
+}
 </style>
 <div id="wrap">
 
@@ -131,7 +139,7 @@ hr {
       
       <p>Ratkaise palapeli muodostamalla pienistä kolmioista iso kolmio. Kaikkien hahmojen ylä- ja alaosan tulee sopia yhteen.</p>
 
-      <p style="background: red">TODO Kunnon kuvat.<br/>Kuvien pohjalta järkevät lyhenteet.<br/>
+      <p style="background: red">TODO Oikeat omat kuvat.<br/>Kuvien pohjalta järkevät lyhenteet.<br/>
       <pre>
         P = Piece
         G = Green
@@ -143,55 +151,55 @@ hr {
       </p>
       <div>
         <div class="piece-img">
-          <img src="P1x.jpg" style="height: 90px;"/>
+          <img src="P1x.png" class="piece-img"/>
           <div class="piece-name">
             P1
           </div>
         </div style="text-align: center;">
         <div class="piece-img">
-          <img src="P2x.jpg" style="height: 90px;"/>
+          <img src="P2x.png" class="piece-img"/>
           <div class="piece-name">
             P2
           </div>
         </div>
         <div class="piece-img">
-          <img src="P3x.jpg" style="height: 90px;"/>
+          <img src="P3x.png" class="piece-img"/>
           <div class="piece-name">
             P3
           </div>
         </div>
         <div class="piece-img">
-          <img src="P4x.jpg" style="height: 90px;"/>
+          <img src="P4x.png" class="piece-img"/>
           <div class="piece-name">
             P4
           </div>
         </div>
         <div class="piece-img">
-          <img src="P5x.jpg" style="height: 90px;"/>
+          <img src="P5x.png" class="piece-img"/>
           <div class="piece-name">
             P5
           </div>
         </div>
         <div class="piece-img">
-          <img src="P6x.jpg" style="height: 90px;"/>
+          <img src="P6x.png" class="piece-img"/>
           <div class="piece-name">
             P6
           </div>
         </div>
         <div class="piece-img">
-          <img src="P7x.jpg" style="height: 90px;"/>
+          <img src="P7x.png" class="piece-img"/>
           <div class="piece-name">
             P7
           </div>
         </div>
         <div class="piece-img">
-          <img src="P8x.jpg" style="height: 90px;"/>
+          <img src="P8x.png" class="piece-img"/>
           <div class="piece-name">
             P8
           </div>
         </div>
         <div class="piece-img">
-          <img src="P9x.jpg" style="height: 90px;"/>
+          <img src="P9x.png" class="piece-img"/>
           <div class="piece-name">
             P9
           </div>
@@ -202,21 +210,38 @@ hr {
       <div>
         <p>Muoto johon palat tulee asettaa:</p>
         <img src="full.png"/>
+        <img src="fullx.png" class="full-piece-img"/>
         <p>Vastaus tulee antaa seuraavassa muodossa:<br/>
-          <span class="mono">
-            {P8 [{TL P6} {TH Nothing} {YH Nothing}], P6 [{TL P8} {GL P5} {TH P9}], P5 [{TL P6} {YL Nothing} {YH P1}], P9 [{GL Nothing} {YL P6} {YH P7}], P1 [{GH P5} {GL P3} {YH P2}],  P4 [{YL P7} {GL Nothing} {YH Nothing}], P2 [{YH P1} {GL Nothing} {TL P7}], P7 [{GL P9} {TH P2} {GH P4}], P3 [{GH P1} {YH Nothing} {GL Nothing}]}
-          </span>
-          <p>Palojen järjestyksellä ei ole väliä. Palojen "asennolla" ei ole väliä, mutta reunat pitää olla oikein suhteessa toisiinsa. Edellä olevan esimerkin palan P6 voi esittää näin:</p>
-          <p class="mono">
-            P6 [{TL P8} {GL P5} {TH P9}]
-          </p>
-          <p class="mono">
-            P6 [{TH P9} {TL P8} {GL P5}]
-          </p>
-          <p class="mono">
-            P6 [{GL P5} {TH P9} {TL P8}]
-          </p>
-          <p style="background: red;">Vastauksia on oikeasti 2. Kerrotaanko se?<br/>Pitääkö tätä vastausesimerkkiä avata enemmän?</p>
+          <div style="background: red;">
+            <p>Vaihtoehto A</p>
+            <span class="mono">
+              {P8 [{TL P6} {TH Nothing} {YH Nothing}], P6 [{TL P8} {GL P5} {TH P9}], P5 [{TL P6} {YL Nothing} {YH P1}], P9 [{GL Nothing} {YL P6} {YH P7}], P1 [{GH P5} {GL P3} {YH P2}], P4 [{YL P7} {GL Nothing} {YH Nothing}], P2 [{YH P1} {GL Nothing} {TL P7}], P7 [{GL P9} {TH P2} {GH P4}], P3 [{GH P1} {YH Nothing} {GL Nothing}]}
+            </span>
+            <p>Palojen järjestyksellä ei ole väliä. Palojen "asennolla" ei ole väliä, mutta reunat pitää olla oikein suhteessa toisiinsa. Edellä olevan esimerkin palan P6 voi esittää näin:</p>
+            <p class="mono">
+              P6 [{TL P8} {GL P5} {TH P9}]
+            </p>
+            <p class="mono">
+              P6 [{TH P9} {TL P8} {GL P5}]
+            </p>
+            <p class="mono">
+              P6 [{GL P5} {TH P9} {TL P8}]
+            </p>
+            <p>Pitääkö tätä vastausesimerkkiä avata enemmän?</p>
+          </div>
+          <div style="background: orange;">
+            <p>Vaihtoehto B</p>
+            <span class="mono">
+              [P8, P6, P5, P9, P1, P4, P2, P3, P7]
+            </span>
+            Järjestyksellä on merkitys. Ensimmäinen pala on huippu, toinen pala on toisen rivin ensimmäinen jne. Katso alla oleva kaavio.
+            <pre>
+                  1                  P8
+                2 3 4             P6 P5 P9
+              5 6 7 8 9        P1 P4 P2 P3 P7
+            </pre>
+          </div>
+          <p style="background: red;">Vastauksia on oikeasti 2. Kerrotaanko se?</p>
         </p>
       </div>
 
@@ -229,6 +254,7 @@ hr {
       <p>Voittajalle luvassa maineen ja kunnian lisäksi <span style="background: red;">hieno palkinto</span></a>.</p>
 
     </div>
+    <img src="original_rules.jpg" style="height: 700px"/>
   </section>
   <div id="footer">
     <a href="https://www.linkedin.com/company/wunderdog-oy" target="_blank"><img src="/img/social/linkedin.png" alt="Linkedin"/></a>
