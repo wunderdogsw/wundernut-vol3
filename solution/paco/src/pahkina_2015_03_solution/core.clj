@@ -2,7 +2,7 @@
   (:require [clojure.math.combinatorics :refer [permutations]]))
 
 ; Just run (find-solutions) to run the algorithm.
-; It takes about 30 seconds on my machine.
+; It takes about 13 seconds on my machine.
 
 
 ; traversal order (step) | in a list (position)
@@ -230,7 +230,7 @@
 
 (defn find-solutions []
   (->> position-permutations
-       (map (comp solution-or-false get-initial-state vec))
+       (pmap (comp solution-or-false get-initial-state vec))
        (filter identity)
        get-unique-states
        (map state->permutation)
