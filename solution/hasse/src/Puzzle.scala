@@ -19,28 +19,33 @@ class Puzzle {
     for (currentPiece <- unusedPieces; i <- 0 to 2) {
       val nextGuess = usedPieces :+ (currentPiece rotate i)
 
-      if (isValid(nextGuess)) {
+      if (nextGuess isValid) {
         solutions = placePieceRecursively(nextGuess, unusedPieces diff Seq(currentPiece), solutions)
       }
     }
     return solutions
   }
 
-  private def isValid(pieces: List[Piece]) = {
-    def connectionAllowed(index1: Int, side1: Int, index2: Int, side2: Int): Boolean = {
-      pieces.length <= Math.max(index1, index2) ||
-      pieces(index1).sides(side1) == -pieces(index2).sides(side2)
-    }
+  implicit class TriangleOrientationValidator(p: List[Piece]) {
+    /* Positions:
+     *   △      0
+     *  △▽△    213
+     * △▽△▽△  64758
+     */
+    def isValid = 
+      ⬇⬆(0, 1) &&
+      △▽(2, 1) && ▽△(1, 3) &&
+      ⬇⬆(2, 4) && ⬇⬆(3, 5) &&
+      △▽(6, 4) && ▽△(4, 7) && △▽(7, 5) && ▽△(5, 8)
 
-    connectionAllowed(0, 2, 1, 1) &&
-    connectionAllowed(2, 1, 1, 0) &&
-    connectionAllowed(3, 0, 1, 2) &&
-    connectionAllowed(2, 2, 4, 1) &&
-    connectionAllowed(3, 2, 5, 1) &&
-    connectionAllowed(6, 1, 4, 0) &&
-    connectionAllowed(7, 0, 4, 2) &&
-    connectionAllowed(7, 1, 5, 0) &&
-    connectionAllowed(5, 2, 8, 0)
+    /* Sides in each orientation:
+     * △: left=0, right=1, bottom=2
+     * ▽: left=0, top=1, right=2
+     */
+    def ⬇⬆(top: Int, bottom: Int) = empty(top, bottom) || p(top).sides(2) + p(bottom).sides(1) == 0
+    def △▽(left: Int, right: Int) = empty(left, right) || p(left).sides(1) + p(right).sides(0) == 0
+    def ▽△(left: Int, right: Int) = empty(left, right) || p(left).sides(2) + p(right).sides(0) == 0
+    def empty(a: Int, b: Int) = p.size <= Math.max(a, b)
   }
 }
 
@@ -51,7 +56,6 @@ object Puzzle {
   val GH = -GL
   val YL = 3
   val YH = -YL
-  val puzzle = new Puzzle()
 
   def main(args: Array[String]): Unit = {
 
@@ -67,10 +71,12 @@ object Puzzle {
       Piece("P9", List(GL, YL, YH))
     )
 
+    val puzzle = new Puzzle()
     puzzle solve pieces foreach printSolution
   }
 
-  private def printSolution(list: List[Piece]) = println ("[" + reorganize(list).map(x => x.name).mkString(", ") + "]")
+  private def printSolution(list: List[Piece]) =
+    println("[" + reorganize(list).map(x => x.name).mkString(", ") + "]")
 
   /* Reorganizes the internal order used by the solver into a more human readable form */
   private def reorganize(in: List[Piece]) = List(
