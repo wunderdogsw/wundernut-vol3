@@ -139,67 +139,66 @@ hr {
       
       <p>Ratkaise palapeli muodostamalla pienistä kolmioista iso kolmio. Kaikkien hahmojen ylä- ja alaosan tulee sopia yhteen.</p>
 
-      <p style="background: red">TODO Oikeat omat kuvat.<br/>Kuvien pohjalta järkevät lyhenteet.<br/>
       <pre>
         P = Piece
         G = Green
-        Y = Yellow
-        T = Tennis
+        R = Red
+        B = Black
         H = Head
         L = Legs
       </pre>
       </p>
       <div>
         <div class="piece-img">
-          <img src="P1x.png" class="piece-img"/>
+          <img src="P1.png" class="piece-img"/>
           <div class="piece-name">
             P1
           </div>
         </div style="text-align: center;">
         <div class="piece-img">
-          <img src="P2x.png" class="piece-img"/>
+          <img src="P2.png" class="piece-img"/>
           <div class="piece-name">
             P2
           </div>
         </div>
         <div class="piece-img">
-          <img src="P3x.png" class="piece-img"/>
+          <img src="P3.png" class="piece-img"/>
           <div class="piece-name">
             P3
           </div>
         </div>
         <div class="piece-img">
-          <img src="P4x.png" class="piece-img"/>
+          <img src="P4.png" class="piece-img"/>
           <div class="piece-name">
             P4
           </div>
         </div>
         <div class="piece-img">
-          <img src="P5x.png" class="piece-img"/>
+          <img src="P5.png" class="piece-img"/>
           <div class="piece-name">
             P5
           </div>
         </div>
         <div class="piece-img">
-          <img src="P6x.png" class="piece-img"/>
+          <img src="P6.png" class="piece-img"/>
           <div class="piece-name">
             P6
           </div>
         </div>
         <div class="piece-img">
-          <img src="P7x.png" class="piece-img"/>
+          <img src="P7.png" class="piece-img"/>
           <div class="piece-name">
             P7
           </div>
         </div>
         <div class="piece-img">
-          <img src="P8x.png" class="piece-img"/>
+          <img src="P8.png" class="piece-img"/>
           <div class="piece-name">
             P8
           </div>
         </div>
         <div class="piece-img">
-          <img src="P9x.png" class="piece-img"/>
+          <img src="P9.png" class="piece-img"/>
           <div class="piece-name">
             P9
           </div>
@@ -210,22 +209,22 @@ hr {
       <div>
         <p>Muoto johon palat tulee asettaa:</p>
         <img src="full.png"/>
-        <img src="fullx.png" class="full-piece-img"/>
+        <img src="kolmiossa.jpg" class="full-piece-img"/>
         <p>Vastaus tulee antaa seuraavassa muodossa:<br/>
           <div style="background: red;">
             <p>Vaihtoehto A</p>
             <span class="mono">
-              {P8 [{TL P6} {TH Nothing} {YH Nothing}], P6 [{TL P8} {GL P5} {TH P9}], P5 [{TL P6} {YL Nothing} {YH P1}], P9 [{GL Nothing} {YL P6} {YH P7}], P1 [{GH P5} {GL P3} {YH P2}], P4 [{YL P7} {GL Nothing} {YH Nothing}], P2 [{YH P1} {GL Nothing} {TL P7}], P7 [{GL P9} {TH P2} {GH P4}], P3 [{GH P1} {YH Nothing} {GL Nothing}]}
+              {P8 [{BL P6} {BH Nothing} {RH Nothing}], P6 [{BL P8} {GL P5} {BH P9}], P5 [{BL P6} {RL Nothing} {RH P1}], P9 [{GL Nothing} {RL P6} {RH P7}], P1 [{GH P5} {GL P3} {RH P2}], P4 [{RL P7} {GL Nothing} {RH Nothing}], P2 [{RH P1} {GL Nothing} {BL P7}], P7 [{GL P9} {BH P2} {GH P4}], P3 [{GH P1} {RH Nothing} {GL Nothing}]}
             </span>
             <p>Palojen järjestyksellä ei ole väliä. Palojen "asennolla" ei ole väliä, mutta reunat pitää olla oikein suhteessa toisiinsa. Edellä olevan esimerkin palan P6 voi esittää näin:</p>
             <p class="mono">
-              P6 [{TL P8} {GL P5} {TH P9}]
+              P6 [{BL P8} {GL P5} {BH P9}]
             </p>
             <p class="mono">
-              P6 [{TH P9} {TL P8} {GL P5}]
+              P6 [{BH P9} {BL P8} {GL P5}]
             </p>
             <p class="mono">
-              P6 [{GL P5} {TH P9} {TL P8}]
+              P6 [{GL P5} {BH P9} {BL P8}]
             </p>
             <p>Pitääkö tätä vastausesimerkkiä avata enemmän?</p>
           </div>
