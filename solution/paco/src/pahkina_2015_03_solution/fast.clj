@@ -106,19 +106,17 @@
   (take 3 (iterate #(turn-piece % step) piece)))
 
 (defn prune [available used result]
-  (cond
-    (empty? available)
-      (conj result used)
-    :else
-      (let [step (count used)
-            pieces (map #(create-piece-at % step) available)
-            rotations (mapcat #(create-rotations % step) pieces)
-            candidates (map (partial conj used) rotations)
-            pos-candidates (filter is-valid? candidates)]
-        (mapcat #(prune (vec (remove #{((last %) :name)} available))
+  (if (empty? available)
+    (conj result used)
+    (let [step (count used)
+          pieces (map #(create-piece-at % step) available)
+          rotations (mapcat #(create-rotations % step) pieces)
+          candidates (map (partial conj used) rotations)
+          pos-candidates (filter is-valid? candidates)]
+      (mapcat #(prune (vec (remove #{((last %) :name)} available))
                       %
                       result)
-                pos-candidates))))
+              pos-candidates))))
 
 
 ;----------------------------
