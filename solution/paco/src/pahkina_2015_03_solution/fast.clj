@@ -1,9 +1,8 @@
-(ns pahkina-2015-03-solution.core
-  (:require [pahkina-2015-03-solution.debug :as d]
-            [clojure.math.combinatorics :refer [permutations]]))
+(ns pahkina-2015-03-solution.fast
+  (:require [pahkina-2015-03-solution.debug :as d]))
 
 ; Just run (find-solutions) to run the algorithm.
-; It takes about 13 seconds on my machine.
+; Removed the brute force part by aping hasse's algorithm.
 
 
 ; traversal order (step) | in a list (position)
@@ -22,14 +21,6 @@
               P2 [YH TL GL]})
 
 (def piece-names (keys pieces))
-
-(def position-permutations (permutations piece-names))
-
-; For debugging
-;(def correct-per '[P1 P3 P7 P6 P5 P9 P4 P8 P2])
-;(def incorrect-per '[P1 P3 P2 P7 P5 P4 P6 P8 P9])
-; --------------------------------
-
 
 ;a c -> b a
 ; b      c
@@ -56,12 +47,6 @@
 (defn point->step [point]
   (point-to-step point))
 
-;           P0
-;           0
-;      P2 1 P1 5 P6
-;      2         6
-; P4 3 P3 4 P5 8 P7 7 P8
-
 ; Places where the edge pairs are
 (def pair-positions [[[0 1] [1 1]]
                      [[1 0] [2 2]]
@@ -79,21 +64,12 @@
     [a b c]
     [c b a]))
 
-(defn get-initial-state [pos-per]
-  (vec (map (fn [pos]
-              (let [point (step->point pos)
-                    name (pos-per point)]
-                {:name name
-                 :edges (up-or-down pos (pieces name))
-                 :turns 0}))
-            (range (count pos-per)))))
+(defn create-piece-at [name step]
+  {:name name
+   :edges (up-or-down step (pieces name))
+   :turns 0})
 
-(defn get-facing-pair-at [state n]
-   (let [[[p1 e1] [p2 e2]] (pair-positions n)]
-    [(get-in state [p1 :edges e1])
-     (get-in state [p2 :edges e2])]))
-
-(defn is-a-pair? [[a b]]
+(defn is-a-pair? [a b]
   (let [a-type (first (str a))
         a-part (second (str a))
         b-type (first (str b))
@@ -101,66 +77,52 @@
     (and (= a-type b-type)
          (not= a-part b-part))))
 
-(defn turn-piece-at [state step]
-  {:pre [(not (neg? step)) (< step (count state))]}
-  (-> state
-      (update-in [step :edges] (partial turn-at step))
-      (update-in [step :turns] inc)))
+(defn check-pair-position [state pos]
+      (let [[[p1 e1] [p2 e2]] (pair-positions pos)
+            piece1 (get state p1)
+            piece2 (get state p2)]
+       (if (or (nil? piece1) (nil? piece2))
+         true
+         (is-a-pair? (get-in piece1 [:edges e1])
+                     (get-in piece2 [:edges e2])))))  
 
-(defn reset-piece-at [state step]
-  (-> state
-      (update-in [step :edges]
-                 (constantly
-                   (up-or-down step (pieces (get-in state [step :name])))))
-      (update-in [step :turns]
-                 (constantly 0))))
-
-(defn step-back [state step]
-  {:pre [(pos? step) (< step (count state))]}
-  (-> state
-      (reset-piece-at step)
-      (turn-piece-at (dec step))))
-
-(defn can-turn-this? [state step]
-  (< (get-in state [step :turns]) 2))
-
-(defn traversal [state step]
-  (let [final-step (dec (count state))]
+(defn is-valid? [state]
+  (let [step (count state)
+        pos (- step 2)]
     (cond
-      (= step final-step)
-        (cond
-          ;correct solution
-          (and (is-a-pair? (get-facing-pair-at state (dec step)))
-               (is-a-pair? (get-facing-pair-at state step)))
-            state
-          ;turn this
-          (can-turn-this? state step)
-            (recur (turn-piece-at state step) step)
-          ;turns used -> go back one step
-          :else
-            (recur (step-back state step) (dec step)))
-      ;zero turned too many times -> not a solution
-      (and (zero? step) (> (get-in state [step :turns]) 2))
-        false
-      ;zero turned -> continue
-      (zero? step)
-        (recur state (inc step))
-      ;pair found -> next step
-      (is-a-pair? (get-facing-pair-at state (dec step)))
-        (recur state (inc step))
-      ;turn this
-      (can-turn-this? state step)
-        (recur (turn-piece-at state step) step)
-      ;go to prev step
-      :else
-       (recur (step-back state step) (dec step))
-)))
+      (neg? pos)
+        true
+    (= step 8) ;two points to check
+      (and (check-pair-position state 8) (check-pair-position state pos))
+    :else
+      (check-pair-position state pos))))
+
+(defn turn-piece [piece step]
+  (-> piece
+      (update-in [:edges] (partial turn-at step))
+      (update-in [:turns] inc)))
+
+(defn create-rotations [piece step]
+  (take 3 (iterate #(turn-piece % step) piece)))
+
+(defn prune [available used result]
+  (cond
+    (empty? available)
+      (conj result used)
+    :else
+      (let [step (count used)
+            pieces (map #(create-piece-at % step) available)
+            rotations (mapcat #(create-rotations % step) pieces)
+            candidates (map (partial conj used) rotations)
+            pos-candidates (filter is-valid? candidates)]
+        (mapcat #(prune (vec (remove #{((last %) :name)} available))
+                      %
+                      result)
+                pos-candidates))))
+
 
 ;----------------------------
 ; Running and printing stuff
-
-(defn solution-or-false [initial-state]
-  (traversal initial-state 1))
 
 (defn state->permutation [state]
   (map (comp :name state point->step)
@@ -193,9 +155,7 @@
     (println s)))
 
 (defn find-solutions []
-  (->> position-permutations
-       (pmap (comp solution-or-false get-initial-state vec))
-       (filter identity)
+  (->> (prune piece-names [] [])
        get-unique-states
        (map state->permutation)
        (map vec)
