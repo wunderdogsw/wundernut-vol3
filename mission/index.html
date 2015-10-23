@@ -96,16 +96,21 @@ hr {
   margin: 4em 1em;
 }
 
-.piece-img {
-  float: left;
-}
-
 .piece-name {
-  padding-left: 45%;
+  text-align: center;
 }
 
 .mono {
   font-family: monospace;
+}
+
+.clear-both {
+  clear: both;
+}
+
+.piece {
+  float: left;
+  margin: 20px 5px;
 }
 
 .piece-img {
@@ -126,79 +131,73 @@ hr {
 
     <div id="challenge-description">
       <blockquote>
-        Sometimes I lie awake at night, and I ask, 'Where have I gone wrong'.
-        Then a voice says to me, 'This is going to take more than one night.'
-        <cite>Charles M. Schulz</cite>
-      </blockquote>
-      <blockquote>
         No problem is so big or so complicated that it can't be run away from!
         <cite>Charles M. Schulz, The Complete Peanuts, 1959-1962</cite>
       </blockquote>
 
       <h3>Koodauspähkinä, syksy 2015: Kolmiopalapeli</h3>
       
-      <p>Ratkaise palapeli muodostamalla pienistä kolmioista iso kolmio. Kaikkien hahmojen ylä- ja alaosan tulee sopia yhteen.</p>
+      <p>Ohjelmoi algoritmi, joka ratkaisee alla olevan palapelin muodostamalla pienistä kolmioista iso kolmio. Kaikkien hahmojen ylä- ja alaosan tulee sopia yhteen.</p>
 
       </p>
-      <div>
-        <div class="piece-img">
+      <div class="pieces">
+        <div class="piece">
           <img src="P1.png" class="piece-img"/>
           <div class="piece-name">
             P1
           </div>
         </div style="text-align: center;">
-        <div class="piece-img">
+        <div class="piece">
           <img src="P2.png" class="piece-img"/>
           <div class="piece-name">
             P2
           </div>
         </div>
-        <div class="piece-img">
+        <div class="piece">
           <img src="P3.png" class="piece-img"/>
           <div class="piece-name">
             P3
           </div>
         </div>
-        <div class="piece-img">
+        <div class="piece">
           <img src="P4.png" class="piece-img"/>
           <div class="piece-name">
             P4
           </div>
         </div>
-        <div class="piece-img">
+        <div class="piece">
           <img src="P5.png" class="piece-img"/>
           <div class="piece-name">
             P5
           </div>
         </div>
-        <div class="piece-img">
+        <div class="piece">
           <img src="P6.png" class="piece-img"/>
           <div class="piece-name">
             P6
           </div>
         </div>
-        <div class="piece-img">
+        <div class="piece">
           <img src="P7.png" class="piece-img"/>
           <div class="piece-name">
             P7
           </div>
         </div>
-        <div class="piece-img">
+        <div class="piece">
           <img src="P8.png" class="piece-img"/>
           <div class="piece-name">
             P8
           </div>
         </div>
-        <div class="piece-img">
+        <div class="piece">
           <img src="P9.png" class="piece-img"/>
           <div class="piece-name">
             P9
           </div>
         </div>
       </div>
-      <div style="clear: both"></div>
       
-      <div>
+      <div class="clear-both">
         <p>Muoto johon palat tulee asettaa:</p>
         <img src="kolmiossa.jpg" class="full-piece-img"/>
         <p>Vastaus tai vastaukset tulee antaa seuraavassa muodossa:</p><br/>
@@ -206,11 +205,13 @@ hr {
             <span class="mono">
               [P8, P6, P5, P9, P1, P4, P2, P3, P7]
             </span>
-            <p>Järjestyksellä on merkitys.</p><p>Ensimmäinen pala on huippu, toinen pala on toisen rivin ensimmäinen jne. Katso alla oleva kaavio.</p>
+            <br/>
+            <br/>
+            <p>Vastauksessa palojen järjestyksellä on seuraavanlainen merkitys:</p><p>Listan ensimmäinen pala on kolmion huippu, listan toinen pala on toisen rivin ensimmäinen jne. Katso alla oleva kaavio.</p>
             <pre>
-                  1                  P8
-                2 3 4             P6 P5 P9
-              5 6 7 8 9        P1 P4 P2 P3 P7
+      1                  P8
+    2 3 4             P6 P5 P9
+  5 6 7 8 9        P1 P4 P2 P3 P7
             </pre>
           </div>
       </div>
@@ -219,6 +220,9 @@ hr {
       <p>Osallistua saa millä ohjelmointikielellä tahansa.</p>
       <p>Lähetä saamasi vastaus ja sen tuottava koodi viimeistään <span style="background: red;">XXXna zz.yy.2015</span> osoitteeseen <a href="mailto:pahkina@wunderdog.fi">pahkina@wunderdog.fi</a>.</p>
       <p>Voittajaksi valitaan elegantein ratkaisu. Eleganttiuden lisäksi voittajaratkaisun on toimittava oikein ja annettava oikea vastaus.</p>
+
+      <h3>Vinkkejä</h3>
+      <p>Brute force -ratkaisu ei ole elegantti.</p>
 
       <h3>Palkinto</h3>
       <p>Voittajalle luvassa maineen ja kunnian lisäksi <span style="background: red;">hieno palkinto</span></a>.</p>
