@@ -102,7 +102,7 @@ object Puzzle {
 
 // Helper object to run code while timing the execution time
 object Timer {
-  /** @return tuple with the result from the given block of code, and execution time in milliseconds */
+  /** @return tuple with the result from the given block of code, and execution time as a Duration object */
   def profile[T](codeBlock: => T): (T, Duration) = {
     val start = Instant.now
     val result = codeBlock
