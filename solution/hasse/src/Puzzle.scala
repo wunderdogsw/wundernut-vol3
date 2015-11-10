@@ -1,5 +1,4 @@
 import scala.collection.mutable.Set
-import scala.annotation.tailrec
 import java.time._
 
 case class Piece(val name: String, val sides: List[Int]) {
@@ -11,59 +10,67 @@ case class Piece(val name: String, val sides: List[Int]) {
   }
 }
 
-class Puzzle {
+/**
+ * Represents the triangle that consists of smaller pieces in the game. The triangle
+ * may or may not be complete, so a triangle may contain between 0 and 9 pieces.
+ * The triangle may only be built incrementally by inserting one piece at a time,
+ * in the following insertion order:
+ *   △      0
+ *  △▽△    213
+ * △▽△▽△  64758
+ */
+case class Triangle(private val pieces: List[Piece] = List()) {
+  /** @return a new Triangle with the given piece placed in the next empty slot */
+  def :+ (p: Piece) = Triangle(pieces :+ p)
 
-  def solve(allPieces: List[Piece]) = {
-    val solutions: Set[List[Piece]] = Set.empty;
-    this.placePieceRecursively(List(), allPieces, solutions)
-    solutions
+  def isValid: Boolean = {
+    /* Sides: △ { left=0, right=1, bottom=2 }, ▽ { left=0, top=1, right=2 } */
+    def ⬇⬆(top: Int, bottom: Int) = piecesMatch(top, bottom, 2, 1)
+    def △▽(left: Int, right: Int) = piecesMatch(left, right, 1, 0)
+    def ▽△(left: Int, right: Int) = piecesMatch(left, right, 2, 0)
+
+    def piecesMatch(pieceA: Int, pieceB: Int, sideA: Int, sideB: Int) =
+      pieces.size <= Math.max(pieceA, pieceB) || pieces(pieceA).sides(sideA) == -pieces(pieceB).sides(sideB)
+
+    return ⬇⬆(0, 1) &&
+      △▽(2, 1) && ▽△(1, 3) &&
+      ⬇⬆(2, 4) && ⬇⬆(3, 5) &&
+      △▽(6, 4) && ▽△(4, 7) && △▽(7, 5) && ▽△(5, 8)
   }
 
-  private def placePieceRecursively(currentState: List[Piece], unusedPieces: List[Piece],
-                                    solutions: Set[List[Piece]]) {
+  override def toString = "[" + sorted.map(_.name).mkString(", ") + "]"
 
+  /* Reorganizes the internal order used by the solver into a more human readable form */
+  def sorted = List(      pieces(0),
+               pieces(2), pieces(1), pieces(3),
+    pieces(6), pieces(4), pieces(7), pieces(5), pieces(8))
+}
+
+object Solver {
+  def solve(allPieces: List[Piece]) = placePieceRecursively(Triangle(), allPieces, Set empty)
+
+  private def placePieceRecursively(current: Triangle, unusedPieces: List[Piece],
+                                    solutions: Set[Triangle]): Set[Triangle] = {
     for (currentPiece <- unusedPieces;
         remainingPieces = unusedPieces diff Seq(currentPiece);
         rotation <- currentPiece.rotations;
-        nextGuess = currentState :+ rotation;
+        nextGuess = current :+ rotation;
         if nextGuess isValid) {
 
       remainingPieces match {
         case Nil => solutions += nextGuess
-        case _ => placePieceRecursively(nextGuess, remainingPieces, solutions)
+        case _   => placePieceRecursively(nextGuess, remainingPieces, solutions)
       }
-
     }
-  }
-
-  implicit class TriangleOrientationValidator(p: List[Piece]) {
-    /* The triangle is built in the following order:
-     *   △      0
-     *  △▽△    213
-     * △▽△▽△  64758
-     */
-    def isValid =
-      ⬇⬆(0, 1) &&
-      △▽(2, 1) && ▽△(1, 3) &&
-      ⬇⬆(2, 4) && ⬇⬆(3, 5) &&
-      △▽(6, 4) && ▽△(4, 7) && △▽(7, 5) && ▽△(5, 8)
-
-    /* Sides in each orientation:
-     * △: left=0, right=1, bottom=2, ▽: left=0, top=1, right=2 */
-    def ⬇⬆(top: Int, bottom: Int) = empty(top, bottom) || p(top).sides(2) == -p(bottom).sides(1)
-    def △▽(left: Int, right: Int) = empty(left, right) || p(left).sides(1) == -p(right).sides(0)
-    def ▽△(left: Int, right: Int) = empty(left, right) || p(left).sides(2) == -p(right).sides(0)
-    def empty(a: Int, b: Int) = p.size <= Math.max(a, b)
+    solutions
   }
 }
 
 object Puzzle {
   val TL = 1
   val TH = -TL
-
   val GL = 2
   val GH = -GL
-
   val YL = 3
   val YH = -YL
 
@@ -80,33 +87,21 @@ object Puzzle {
   )
 
   def main(args: Array[String]): Unit = {
-
     val (solutions, duration) = Timer.profile {
-      val puzzle = new Puzzle()
-      puzzle solve pieces
+      Solver solve pieces
     }
 
-    solutions foreach printSolution
+    solutions foreach println
     println(s"Completed in ${duration toMillis} ms")
   }
-
-  private def printSolution(list: List[Piece]) =
-    println("[" + reorganize(list).map(x => x.name).mkString(", ") + "]")
-
-  /* Reorganizes the internal order used by the solver into a more human readable form */
-  private def reorganize(in: List[Piece]) = List(
-                  in(0),
-           in(2), in(1), in(3),
-    in(6), in(4), in(7), in(5), in(8))
 }
 
-// Helper object to run code while timing the execution time
 object Timer {
-  /** @return tuple with the result from the given block of code, and execution time as a Duration object */
+  /** @return the result from the given block of code and the Duration that it took to execute */
   def profile[T](codeBlock: => T): (T, Duration) = {
-    val start = Instant.now
+    val start = Instant now
     val result = codeBlock
 
-    (result, Duration.between(start, Instant.now))
+    (result, Duration between(start, Instant now))
   }
 }
