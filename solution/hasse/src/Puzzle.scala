@@ -8,18 +8,23 @@ case class Piece(val name: String, val sides: List[Int]) {
     val shift = sides take count
     Piece(name, (sides diff shift) ++ shift)
   }
+
+  override def toString = name
 }
 
 /**
- * Represents the triangle that consists of smaller pieces in the game. The triangle
- * may or may not be complete, so a triangle may contain between 0 and 9 pieces.
- * The triangle may only be built incrementally by inserting one piece at a time,
- * in the following insertion order:
+ * The "big" triangle that consists of smaller ones. A triangle may or may not be
+ * complete, so a triangle object may contain any number of pieces. Triangles are
+ * immutable and can only be built incrementally by inserting one piece at a time.
+ * Each insertion creates a new triangle. The triangles are built in the  following
+ * insertion order:
  *   △      0
  *  △▽△    213
  * △▽△▽△  64758
  */
 case class Triangle(private val pieces: List[Piece] = List()) {
+  def get(i: Int) = pieces lift i
+
   /** @return a new Triangle with the given piece placed in the next empty slot */
   def :+ (p: Piece) = Triangle(pieces :+ p)
 
@@ -30,7 +35,7 @@ case class Triangle(private val pieces: List[Piece] = List()) {
     def ▽△(left: Int, right: Int) = piecesMatch(left, right, 2, 0)
 
     def piecesMatch(pieceA: Int, pieceB: Int, sideA: Int, sideB: Int) =
-      pieces.size <= Math.max(pieceA, pieceB) || pieces(pieceA).sides(sideA) == -pieces(pieceB).sides(sideB)
+      get(pieceA).isEmpty || get(pieceB).isEmpty || pieces(pieceA).sides(sideA) == -pieces(pieceB).sides(sideB)
 
     return ⬇⬆(0, 1) &&
       △▽(2, 1) && ▽△(1, 3) &&
@@ -38,23 +43,29 @@ case class Triangle(private val pieces: List[Piece] = List()) {
       △▽(6, 4) && ▽△(4, 7) && △▽(7, 5) && ▽△(5, 8)
   }
 
-  override def toString = "[" + sorted.map(_.name).mkString(", ") + "]"
+  /** Reorganizes the internally used order of pieces to the one used in the game specification */
+  def sorted = List(  get(0),
+              get(2), get(1), get(3),
+      get(6), get(4), get(7), get(5), get(8)
+    ).filter(_.isDefined).map(_.get)
 
-  /* Reorganizes the internal order used by the solver into a more human readable form */
-  def sorted = List(      pieces(0),
-               pieces(2), pieces(1), pieces(3),
-    pieces(6), pieces(4), pieces(7), pieces(5), pieces(8))
+    override def toString = "[" + sorted.mkString(", ") + "]"
 }
 
 object Solver {
   def solve(allPieces: List[Piece]) = placePieceRecursively(Triangle(), allPieces, Set empty)
 
-  private def placePieceRecursively(current: Triangle, unusedPieces: List[Piece],
+  /**
+   * Tries to put each of the unused pieces in each rotation to the next empty slot
+   * in the triangle. If the piece fits, a recursive call is made to place the next
+   * piece. When all pieces are added and they all fit, the formed triangle is stored
+   * in the set of solutions, which is also returned at the end of the algorithm. */
+  private def placePieceRecursively(triangle: Triangle, unusedPieces: List[Piece],
                                     solutions: Set[Triangle]): Set[Triangle] = {
-    for (currentPiece <- unusedPieces;
-        remainingPieces = unusedPieces diff Seq(currentPiece);
-        rotation <- currentPiece.rotations;
-        nextGuess = current :+ rotation;
+    for (piece <- unusedPieces;
+        remainingPieces = unusedPieces diff Seq(piece);
+        rotatedPiece <- piece.rotations;
+        nextGuess = triangle :+ rotatedPiece;
         if nextGuess isValid) {
 
       remainingPieces match {
