@@ -15,15 +15,21 @@ gulp.task('default', ['css', 'js', 'copy', 'watch', 'calculate', 'serve']);
 
 gulp.task('calculate', () => {
 
-  let combinations = calculate();
+  let
+    dir = './dist',
+    file = dir + '/combinations.json',
+    combinations = calculate();
 
-  fs.writeFile('./dist/combinations.json', JSON.stringify(combinations), e => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
+
+  fs.writeFile(file, JSON.stringify(combinations), e => {
     if (e) {
       console.log(e);
       return;
     }
-
-    console.log('Saved results into dist/combinations.json');
+    console.log('Saved results into ' + file);
   });
 
 });
