@@ -45,8 +45,6 @@ object Main {
 
   def slotToSolutionFormat(slot: Slot): String = "P" + (parts.indexOf(slot.rotatedPart.get.edges) + 1)
 
-  def stringsToTriangle(s: Seq[String]): String = "      " + s(0) + "\n   " + s(1) + " " + s(2) + " " + s(3) + "\n" + s(4) + " " + s(5) + " " + s(6) + " " + s(7) + " " + s(8)
-
   def matches(r1: RotatedPart, r2: RotatedPart, angle: Int): Boolean = {
     val edge1 = r1.edges((angle + (3 - r1.angle)) % 3)
     val edge2 = r2.edges((angle + (3 - r2.angle)) % 3)
@@ -105,6 +103,6 @@ object Main {
     }
 
     for (s <- uniques)
-      println(stringsToTriangle(toSolutionOrder(s) map slotToSolutionFormat) + "\n")
+      println("[" + (toSolutionOrder(s) map slotToSolutionFormat).mkString(", ") + "]")
   }
 }
