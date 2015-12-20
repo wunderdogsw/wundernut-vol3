@@ -1,5 +1,7 @@
-Java Enterprise solution for Wundernut part III
+Java "enterprise" solution for Wundernut part III
 ===============================================
+
+This is a class-rich, non-elegant solution for Wunderdog's third Wundernut challenge.
 
 Prerequisites
 -------------
