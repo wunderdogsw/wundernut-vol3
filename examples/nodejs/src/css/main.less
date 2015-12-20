@@ -1,0 +1,67 @@
+body {
+  margin: 0;
+  padding: 50px;
+  font-family: Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+#container {
+  position: relative;
+  height: 600px;
+
+  #pieces {
+    transform: translatez(0);
+    backface-visibility: hidden;
+    perspective: 1000;
+
+    .piece {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 200px;
+      height: 174px;
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      transition: all .5s ease-out;
+      transform-origin: 100px 116px;
+    }
+
+    .loop (@i) when (@i > 0) {
+      @index: @i - 1;
+      @x: mod(@index, 3) * 200;
+      @y: floor(@index / 3) * 200;
+      #P@{i} {
+        left: 0;
+        top: 0;
+        transform: translate(~"@{x}px", ~"@{y}px");
+        background-image: ~"url('/img/P@{i}.png')";
+      }
+      .loop(@i - 1);
+    }
+
+    .loop(9);
+
+  }
+
+  #combinations {
+    position: absolute;
+    left: 650px;
+    top: 0;
+
+    ul {
+      counter-reset: list;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        cursor: pointer;
+
+        &::before {
+          counter-increment: list;
+          content: counter(list) ": ";
+        }
+      }
+    }
+  }
+}
