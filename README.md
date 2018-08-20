@@ -30,15 +30,15 @@ Release the Force and program an algorithm, which forms a grand Megakolmio out o
 ![P7](./img/P7.png)
 
  P8
-![P8](./img/PP8png)
+![P8](./img/P8.png)
 
  P9
-![P9](./img/P19png)
+![P9](./img/P9.png)
  
 
 This is the Megakolmio, in complete:
 
-![Megakolmio, with a flaw](./img/megakolmio.png)
+![Megakolmio, with a flaw](./img/megakolmio.jpeg)
 
 
 Give your solution(s) as follows:
@@ -65,7 +65,7 @@ Hot tip: Brute force solution is not elegant.
  
 
 SAMA SUOMEKSI
-
+ 
 Päästä Voima valloilleen ja koodaa algoritmi, jolla saat Minikolmioista suuren Megakolmion. Minikolmioiden sivujen pitää sopia yhteen.
 
 Anna ratkaisu tai ratkaisut seuraavassa muodossa:
