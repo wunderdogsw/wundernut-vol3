@@ -110,9 +110,9 @@ Pähkinäraatimme kokoontui tarkastelemaan vastauksia ja valitsi mielestään el
 Oikeita ratkaisuja on 6, joista kaksi on uniikkia ja loput megakolmion käännöksiä niistä. Alla oikeat vastaukset:
 
 
-[ P1, P3, P7, P6, P5, P9, P4, P8, P2 ]
-[ P2, P6, P8, P4, P1, P7, P3, P9, P5 ]
-[ P3, P1, P4, P5, P9, P2, P7, P6, P8 ]
-[ P5, P4, P9, P3, P2, P8, P6, P7, P1 ]
-[ P8, P5, P6, P7, P3, P4, P1, P2, P9 ]
-[ P9, P7, P2, P1, P8, P6, P5, P4, P3 ]
+    [ P1, P3, P7, P6, P5, P9, P4, P8, P2 ]
+    [ P2, P6, P8, P4, P1, P7, P3, P9, P5 ]
+    [ P3, P1, P4, P5, P9, P2, P7, P6, P8 ]
+    [ P5, P4, P9, P3, P2, P8, P6, P7, P1 ]
+    [ P8, P5, P6, P7, P3, P4, P1, P2, P9 ]
+    [ P9, P7, P2, P1, P8, P6, P5, P4, P3 ]
